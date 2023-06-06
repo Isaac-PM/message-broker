@@ -1,0 +1,36 @@
+syntax = "proto3";
+option java_multiple_files =  true;
+option java_package = "una.servidor";
+option java_outer_classname = "ProtocolProto";
+
+package protocol;
+
+service Mensaje {
+    rpc sesion (SesionRequest) returns (SesionResponse) {}
+    rpc enviarMensaje (MensajeRequest) returns (MensajeResponse) {}
+}
+
+message SesionRequest { // Mensaje (anteriormente) tipo 1.
+    int32 tipo = 1; // Tipo de mensaje 1 = Login, 2 = Logout.
+    string idUsuario = 2; // ID del usuario que quiere iniciar sesión o cerrar sesión.
+    int32 tipoUsuario = 3; // Tipo de usuario 1 = Productor, 2 = Suscriptor.
+    string suscripciones = 4; // Lista de suscripciones del usuario, un productor no tiene suscripciones, separadas por coma.
+}
+
+message SesionResponse { // Mensaje (respuesta, anteriormente) tipo 1.
+    int32 estado = 1; // Estado de la sesión 200 = OK, 503 = Error (intente más tarde).
+}
+
+message MensajeRequest { // Mensaje (anteriormente) tipo 2.
+    string identificador = 1; // ID del mensaje = Hash + Epoch + ID del tema.
+    int32 idTema = 2; // ID del tema al que pertenece el mensaje 1, 2 ó 3.
+    string idUsuarioEmisor = 3; // ID del usuario (productor) que envía el mensaje.
+    string contenido = 4; // Contenido del mensaje.
+}
+
+message MensajeResponse { // Mensaje (anteriormente) tipo 3.
+    string identificador = 1; // ID del mensaje.
+    string idUsuarioEmisor = 2; // ID del usuario que leyó ó recibió el mensaje (puede ser "Servidor").
+    int32 estado = 3; // Estado del mensaje 200 = OK, 503 = Error (intente más tarde).
+}
+
