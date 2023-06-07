@@ -1,4 +1,3 @@
-from concurrent.futures import thread
 import grpc
 import protocol_pb2
 import protocol_pb2_grpc
@@ -6,6 +5,7 @@ import logging
 import threading
 from concurrent import futures
 from datetime import datetime
+from concurrent.futures import thread
 from obj import Usuario, Tema, Mensaje
 
 usuarios_lock = threading.Lock()

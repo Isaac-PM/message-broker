@@ -1,5 +1,6 @@
 import threading
 from time import sleep
+
 class Usuario:
     def __init__(self, id, tipo, suscripciones):
         self.id = id
@@ -52,4 +53,3 @@ class Mensaje:
         self.id_tema = id_tema
         self.id_usuario_emisor = id_usuario_emisor
         self.contenido = contenido
-        
