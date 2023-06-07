@@ -24,6 +24,11 @@ class MensajeStub(object):
                 request_serializer=protocol__pb2.MensajeRequest.SerializeToString,
                 response_deserializer=protocol__pb2.MensajeResponse.FromString,
                 )
+        self.escuchar = channel.unary_stream(
+                '/protocol.Mensaje/escuchar',
+                request_serializer=protocol__pb2.EscuchaRequest.SerializeToString,
+                response_deserializer=protocol__pb2.EscuchaResponse.FromString,
+                )
 
 
 class MensajeServicer(object):
@@ -41,6 +46,12 @@ class MensajeServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def escuchar(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MensajeServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_MensajeServicer_to_server(servicer, server):
                     servicer.enviarMensaje,
                     request_deserializer=protocol__pb2.MensajeRequest.FromString,
                     response_serializer=protocol__pb2.MensajeResponse.SerializeToString,
+            ),
+            'escuchar': grpc.unary_stream_rpc_method_handler(
+                    servicer.escuchar,
+                    request_deserializer=protocol__pb2.EscuchaRequest.FromString,
+                    response_serializer=protocol__pb2.EscuchaResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -95,5 +111,22 @@ class Mensaje(object):
         return grpc.experimental.unary_unary(request, target, '/protocol.Mensaje/enviarMensaje',
             protocol__pb2.MensajeRequest.SerializeToString,
             protocol__pb2.MensajeResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def escuchar(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/protocol.Mensaje/escuchar',
+            protocol__pb2.EscuchaRequest.SerializeToString,
+            protocol__pb2.EscuchaResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

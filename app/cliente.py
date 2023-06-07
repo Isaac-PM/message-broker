@@ -1,4 +1,3 @@
-from time import sleep
 import grpc
 import protocol_pb2
 import protocol_pb2_grpc
@@ -7,23 +6,20 @@ import re
 import hashlib
 import time
 import os
+from time import sleep
 from concurrent import futures
 
 def iniciarSesion(_tipo, _idUsuario, _tipoUsuario, _suscripciones):
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = protocol_pb2_grpc.MensajeStub(channel)
         response = stub.sesion(protocol_pb2.SesionRequest(tipo =_tipo, idUsuario = _idUsuario, tipoUsuario = _tipoUsuario, suscripciones = _suscripciones))
-    
     return response.estado
 
 def limpiar_pantalla():
-    # Limpiar la pantalla en Windows
     if os.name == 'nt':
         os.system('cls')
-    # Limpiar la pantalla en sistemas Unix (Linux, macOS)
     else:
         os.system('clear')
-
 
 def enviarMensaje(_idUsuarioEmisor):
     print(">>>>>>>>>> Enviar un mensaje <<<<<<<<<<")
@@ -65,7 +61,7 @@ def menu_cliente():
         patron = r'^(1|2|3)(,\s(1|2|3))*$' # Pendiente procesar en el servidor.
         suscripciones = ""
         while not re.match(patron, suscripciones):
-            print("\tDigite las suscripciones (números del 1 al 3, separados por comas):")
+            print("\tDigite las suscripciones (números del 1 al 3, separados por comas y un espacio):")
             suscripciones = input()
     
     estado = iniciarSesion(1, idUsuario, tipoUsuario, suscripciones) # El tipo 1 indica que es una solicitud de inicio de sesión.
@@ -73,7 +69,7 @@ def menu_cliente():
         print("Sesión iniciada con éxito, enter para continuar.")
         input()
 
-        if tipoUsuario == 1:
+        if tipoUsuario == 1: # Productor.
             cerrarSesion = False
             while not cerrarSesion:
                 limpiar_pantalla()
@@ -90,6 +86,11 @@ def menu_cliente():
                 else:
                     print("Opción inválida, enter para continuar.")
                     input()
+        else: # Suscriptor.
+            limpiar_pantalla()
+            print("TO DO...")
+            while True:
+                continue
         """
         estado = cerrarSesion(2, idUsuario, tipoUsuario, suscripciones) # El tipo 2 indica que es una solicitud de cierre de sesión.
         if estado == 200: print("Sesión cerrada con éxito.")
