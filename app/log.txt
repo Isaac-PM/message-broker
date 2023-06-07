@@ -1,0 +1,70 @@
+07/06/2023:15:25:00 [INICIO DE SESION] ID Usuario: Juan Tipo usuario: Productor Estado: 200
+07/06/2023:15:25:11 [INICIO DE SESION] ID Usuario: Maria Tipo usuario: Suscriptor Estado: 200
+07/06/2023:15:25:27 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 1 Contenido: Hola tema 1 Estado: 200
+07/06/2023:15:25:27 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 83478d8d28c97143121cb7029e01645e16861731271301 
+07/06/2023:15:27:49 [INICIO DE SESION] ID Usuario: Maria Tipo usuario: Suscriptor Estado: 200
+07/06/2023:15:27:58 [INICIO DE SESION] ID Usuario: Juan Tipo usuario: Productor Estado: 200
+07/06/2023:15:28:09 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 1 Contenido: Hola tema 1 Estado: 200
+07/06/2023:15:28:12 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 83478d8d28c97143121cb7029e01645e16861732898711 
+07/06/2023:15:34:04 [INICIO DE SESION] ID Usuario: Juan Tipo usuario: Productor Estado: 200
+07/06/2023:15:34:17 [INICIO DE SESION] ID Usuario: Maria Tipo usuario: Suscriptor Estado: 200
+07/06/2023:15:34:27 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 1 Contenido: Hola tema 1 Estado: 200
+07/06/2023:15:34:28 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 83478d8d28c97143121cb7029e01645e16861736673861 
+07/06/2023:15:34:52 [INICIO DE SESION] ID Usuario: Pedro Tipo usuario: Suscriptor Estado: 200
+07/06/2023:15:35:10 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 1 Contenido: Hola tema 1 reciben 2 Estado: 200
+07/06/2023:15:35:12 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 2bf954e998a077c06f1ea7fad4bf45fb16861737106781 
+07/06/2023:15:35:12 [MENSAJE ENVIADO] ID Usuario: Pedro ID Mensaje: 2bf954e998a077c06f1ea7fad4bf45fb16861737106781 
+07/06/2023:15:38:29 [INICIO DE SESION] ID Usuario: Juan Tipo usuario: Productor Estado: 200
+07/06/2023:15:38:44 [INICIO DE SESION] ID Usuario: Pedro Tipo usuario: Suscriptor Estado: 200
+07/06/2023:15:39:00 [INICIO DE SESION] ID Usuario: Maria Tipo usuario: Suscriptor Estado: 200
+07/06/2023:15:39:12 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 1 Contenido: Hola tema 1 A Estado: 200
+07/06/2023:15:39:12 [MENSAJE ENVIADO] ID Usuario: Pedro ID Mensaje: 1d405307fa53ce0f183216cd88e3a0d116861739523961 
+07/06/2023:15:39:13 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 1d405307fa53ce0f183216cd88e3a0d116861739523961 
+07/06/2023:15:40:10 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 1 Contenido: Hola tema 1 B Estado: 200
+07/06/2023:15:40:11 [MENSAJE ENVIADO] ID Usuario: Pedro ID Mensaje: df0fba08aa976a81f4b5a545c0e8029c16861740101021 
+07/06/2023:15:40:11 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: df0fba08aa976a81f4b5a545c0e8029c16861740101021 
+07/06/2023:15:41:47 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 2 Contenido: Hola tema 2 A Estado: 200
+07/06/2023:15:41:49 [MENSAJE ENVIADO] ID Usuario: Pedro ID Mensaje: bab38dc29ee5e7773a236e190ed7a7e616861741079692 
+07/06/2023:15:42:01 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 3 Contenido: Hola tema 3 A Estado: 200
+07/06/2023:15:42:04 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 5e3e67f8d613b0ca98b69a474b95bb7816861741216983 
+07/06/2023:15:42:27 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 1 Contenido: Hola tema 1 C Estado: 200
+07/06/2023:15:42:29 [MENSAJE ENVIADO] ID Usuario: Pedro ID Mensaje: 4f7e28a7d60d3ea22419ea4a5f1111ef16861741477801 
+07/06/2023:15:42:30 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 4f7e28a7d60d3ea22419ea4a5f1111ef16861741477801 
+07/06/2023:15:42:53 [INICIO DE SESION] ID Usuario: Tomas Tipo usuario: Suscriptor Estado: 200
+07/06/2023:15:43:05 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 1 Contenido: Hola tema 1 H Estado: 200
+07/06/2023:15:43:07 [MENSAJE ENVIADO] ID Usuario: Pedro ID Mensaje: 2ccad117e6e828c5e541d2a958e7c23916861741859351 
+07/06/2023:15:43:08 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 2ccad117e6e828c5e541d2a958e7c23916861741859351 
+07/06/2023:15:43:08 [MENSAJE ENVIADO] ID Usuario: Tomas ID Mensaje: 2ccad117e6e828c5e541d2a958e7c23916861741859351 
+07/06/2023:15:45:37 [INICIO DE SESION] ID Usuario: Juan Tipo usuario: Productor Estado: 200
+07/06/2023:15:45:53 [INICIO DE SESION] ID Usuario: Maria Tipo usuario: Suscriptor Estado: 200
+07/06/2023:15:46:03 [INICIO DE SESION] ID Usuario: Tomas Tipo usuario: Suscriptor Estado: 200
+07/06/2023:15:46:26 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 1 Contenido: Hola tema 1 Estado: 200
+07/06/2023:15:46:28 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 83478d8d28c97143121cb7029e01645e16861743868081 
+07/06/2023:15:46:28 [MENSAJE ENVIADO] ID Usuario: Tomas ID Mensaje: 83478d8d28c97143121cb7029e01645e16861743868081 
+07/06/2023:15:48:53 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 1 Contenido: Tema unoooooooooooooooooo Estado: 200
+07/06/2023:15:48:54 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 50c5c9ffaaf4ded770a1b0dc06b219f216861745336801 
+07/06/2023:15:48:54 [MENSAJE ENVIADO] ID Usuario: Tomas ID Mensaje: 50c5c9ffaaf4ded770a1b0dc06b219f216861745336801 
+07/06/2023:15:49:11 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 2 Contenido: Temaaaaaaaaaaa 2222222222222 Estado: 200
+07/06/2023:15:49:12 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 5733bacc542eb2c33a4655ef12f11f0f16861745510032 
+07/06/2023:15:56:47 [CERRAR SESION] ID Usuario: Juan Tipo usuario: Productor Estado: 200
+07/06/2023:16:02:28 [INICIO DE SESION] ID Usuario: Juan Tipo usuario: Productor Estado: 200
+07/06/2023:16:02:36 [INICIO DE SESION] ID Usuario: Maria Tipo usuario: Suscriptor Estado: 200
+07/06/2023:16:03:10 [INICIO DE SESION] ID Usuario: Tomas Tipo usuario: Suscriptor Estado: 200
+07/06/2023:16:03:22 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 1 Contenido: Hola tema 1 Estado: 200
+07/06/2023:16:03:23 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 83478d8d28c97143121cb7029e01645e16861754025091 
+07/06/2023:16:03:25 [MENSAJE ENVIADO] ID Usuario: Tomas ID Mensaje: 83478d8d28c97143121cb7029e01645e16861754025091 
+07/06/2023:16:03:28 [ENVIAR MENSAJE] ID Usuario: Juan ID Tema: 2 Contenido: Hola tema 2 Estado: 200
+07/06/2023:16:03:29 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 70400cc73933fc6dfbc598e31398b97516861754085692 
+07/06/2023:16:03:48 [INICIO DE SESION] ID Usuario: Braum Tipo usuario: Productor Estado: 200
+07/06/2023:16:03:56 [ENVIAR MENSAJE] ID Usuario: Braum ID Tema: 1 Contenido: Hola tema 1 Estado: 200
+07/06/2023:16:03:57 [MENSAJE ENVIADO] ID Usuario: Tomas ID Mensaje: 83478d8d28c97143121cb7029e01645e16861754368801 
+07/06/2023:16:03:57 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 83478d8d28c97143121cb7029e01645e16861754368801 
+07/06/2023:16:04:20 [ENVIAR MENSAJE] ID Usuario: Braum ID Tema: 1 Contenido: Hola tema 1, de nuevo Estado: 200
+07/06/2023:16:04:21 [MENSAJE ENVIADO] ID Usuario: Tomas ID Mensaje: 7951b3b4ee38fa7260b4e3533467cd8316861754604151 
+07/06/2023:16:04:21 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 7951b3b4ee38fa7260b4e3533467cd8316861754604151 
+07/06/2023:16:04:34 [ENVIAR MENSAJE] ID Usuario: Braum ID Tema: 2 Contenido: Hola persona del tema 2 Estado: 200
+07/06/2023:16:04:35 [MENSAJE ENVIADO] ID Usuario: Maria ID Mensaje: 5d3d28b259f8080c0ae3b3f7c9e6164e16861754745292 
+07/06/2023:16:05:10 [CERRAR SESION] ID Usuario: Braum Tipo usuario: Productor Estado: 200
+07/06/2023:16:05:16 [CERRAR SESION] ID Usuario: Juan Tipo usuario: Productor Estado: 200
+07/06/2023:16:06:34 [INICIO DE SESION] ID Usuario: hOLA Tipo usuario: Productor Estado: 200
+07/06/2023:16:06:37 [CERRAR SESION] ID Usuario: hOLA Tipo usuario: Productor Estado: 200

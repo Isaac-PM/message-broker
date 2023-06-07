@@ -5,7 +5,7 @@ package protocol;
 service Mensaje {
     rpc sesion (SesionRequest) returns (SesionResponse) {}
     rpc enviarMensaje (MensajeRequest) returns (MensajeResponse) {}
-    rpc escuchar (EscuchaRequest) returns (stream EscuchaResponse) {}
+    rpc escuchar (EscuchaRequest) returns (EscuchaResponse) {}
 }
 
 message SesionRequest { // Mensaje (anteriormente) tipo 1.
@@ -33,14 +33,18 @@ message MensajeResponse { // Mensaje (anteriormente) tipo 3.
     int32 estado = 3; // Estado del mensaje 200 = OK, 503 = Error (intente más tarde).
 }
 
+message MensajeStruct {
+    string identificador = 1;
+    int32 idTema = 2;
+    string idUsuarioEmisor = 3;
+    string contenido = 4;
+}
+
 message EscuchaRequest {
     string idUsuario = 1; // ID del usuario que quiere escuchar si hay mensajes.
 }
 
 message EscuchaResponse {
     int32 estado = 1; // Estado de la escucha 200 = OK, 400 = No hay mensajes.
-    string identificador = 2; // ID del mensaje recibido.
-    int32 idTema = 3; // ID del tema al que pertenece el mensaje.
-    string idUsuarioEmisor = 4; // ID del productor que envía el mensaje.
-    string contenido = 5; // Contenido del mensaje.
+    repeated MensajeStruct mensajes = 2; // Lista de mensajes.
 }

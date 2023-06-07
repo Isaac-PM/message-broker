@@ -24,7 +24,7 @@ class MensajeStub(object):
                 request_serializer=protocol__pb2.MensajeRequest.SerializeToString,
                 response_deserializer=protocol__pb2.MensajeResponse.FromString,
                 )
-        self.escuchar = channel.unary_stream(
+        self.escuchar = channel.unary_unary(
                 '/protocol.Mensaje/escuchar',
                 request_serializer=protocol__pb2.EscuchaRequest.SerializeToString,
                 response_deserializer=protocol__pb2.EscuchaResponse.FromString,
@@ -65,7 +65,7 @@ def add_MensajeServicer_to_server(servicer, server):
                     request_deserializer=protocol__pb2.MensajeRequest.FromString,
                     response_serializer=protocol__pb2.MensajeResponse.SerializeToString,
             ),
-            'escuchar': grpc.unary_stream_rpc_method_handler(
+            'escuchar': grpc.unary_unary_rpc_method_handler(
                     servicer.escuchar,
                     request_deserializer=protocol__pb2.EscuchaRequest.FromString,
                     response_serializer=protocol__pb2.EscuchaResponse.SerializeToString,
@@ -125,7 +125,7 @@ class Mensaje(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/protocol.Mensaje/escuchar',
+        return grpc.experimental.unary_unary(request, target, '/protocol.Mensaje/escuchar',
             protocol__pb2.EscuchaRequest.SerializeToString,
             protocol__pb2.EscuchaResponse.FromString,
             options, channel_credentials,

@@ -9,11 +9,22 @@ import os
 from time import sleep
 from concurrent import futures
 
-def iniciarSesion(_tipo, _idUsuario, _tipoUsuario, _suscripciones):
+def sesion(_tipo, _idUsuario, _tipoUsuario, _suscripciones):
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = protocol_pb2_grpc.MensajeStub(channel)
         response = stub.sesion(protocol_pb2.SesionRequest(tipo =_tipo, idUsuario = _idUsuario, tipoUsuario = _tipoUsuario, suscripciones = _suscripciones))
     return response.estado
+
+def escucharMensajes(_idUsuario):
+    with grpc.insecure_channel('localhost:50051') as channel:
+        stub = protocol_pb2_grpc.MensajeStub(channel)
+        response = stub.escuchar(protocol_pb2.EscuchaRequest(idUsuario = _idUsuario))
+        if response.estado == 200:
+            for mensaje in response.mensajes:
+                print(f">>>>>>>>>> Mensaje recibido en el tema {mensaje.idTema} <<<<<<<<<<")
+                print("Emisor:", mensaje.idUsuarioEmisor)
+                print("Contenido:", mensaje.contenido)
+                print()
 
 def limpiar_pantalla():
     if os.name == 'nt':
@@ -51,11 +62,12 @@ def menu_cliente():
     print("\tDigite su nombre de usuario:")
     idUsuario = input()
 
-    tipoUsuario = -1
-    while tipoUsuario != 1 and tipoUsuario != 2:
+    tipoUsuario = ""
+    while tipoUsuario != "1" and tipoUsuario != "2":
         print("\tDigite el tipo de usuario (1 = Productor, 2 = Suscriptor):")
-        tipoUsuario = int(input())
+        tipoUsuario = input()
     
+    tipoUsuario = int(tipoUsuario)
     suscripciones = ""
     if tipoUsuario == 2:
         patron = r'^(1|2|3)(,\s(1|2|3))*$' # Pendiente procesar en el servidor.
@@ -64,7 +76,7 @@ def menu_cliente():
             print("\tDigite las suscripciones (números del 1 al 3, separados por comas y un espacio):")
             suscripciones = input()
     
-    estado = iniciarSesion(1, idUsuario, tipoUsuario, suscripciones) # El tipo 1 indica que es una solicitud de inicio de sesión.
+    estado = sesion(1, idUsuario, tipoUsuario, suscripciones) # El tipo 1 indica que es una solicitud de inicio de sesión.
     if estado == 200:
         print("Sesión iniciada con éxito, enter para continuar.")
         input()
@@ -88,20 +100,23 @@ def menu_cliente():
                     input()
         else: # Suscriptor.
             limpiar_pantalla()
-            print("TO DO...")
+            print(">>>>>>>>>> Menú consumidor <<<<<<<<<<")
+            print(f"Escuchando mensajes en el (los) tema(s) {suscripciones}...")
+            print("Presione Ctrl + C para cerrar sesión.")
+            print()
             while True:
-                continue
-        """
-        estado = cerrarSesion(2, idUsuario, tipoUsuario, suscripciones) # El tipo 2 indica que es una solicitud de cierre de sesión.
+                escucharMensajes(idUsuario)
+                sleep(2)
+    
+        estado = sesion(2, idUsuario, tipoUsuario, suscripciones) # El tipo 2 indica que es una solicitud de cierre de sesión.
         if estado == 200: print("Sesión cerrada con éxito.")
-        """
-        print("Sesión cerrada con éxito.")
+        else: print("Error al cerrar sesión, se detuvo la aplicación.")
         exit()
-    else:
-        print("Error al iniciar sesión.")
+        
+    elif estado == 409:
+        print("Se detectó un nombre de usuario duplicado, intente de nuevo.")
         exit()
 
 if __name__ == '__main__':
     logging.basicConfig()
     menu_cliente()
-

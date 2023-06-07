@@ -30,7 +30,7 @@ class MensajeServicer(protocol_pb2_grpc.MensajeServicer):
         tipo = request.tipo
         idUsuario = request.idUsuario
         tipoUsuario = request.tipoUsuario
-        suscripciones = request.suscripciones.split(",")
+        suscripciones = request.suscripciones.split(", ")
         estado = 503
         
         if tipo == 1:
@@ -49,11 +49,14 @@ class MensajeServicer(protocol_pb2_grpc.MensajeServicer):
                         with tema3_lock:
                             Tema3.suscriptores.append(usuario)
                     estado = 200
+                else:
+                    estado = 409
         elif tipo == 2:
             with usuarios_lock:
                 ids_usuarios = [usuario.id for usuario in usuarios]
                 if idUsuario in ids_usuarios:
-                    usuarios.remove(idUsuario)
+                    usuario = usuarios[ids_usuarios.index(idUsuario)]
+                    usuarios.remove(usuario)
                     estado = 200
         
         cadena_log = f'{str(datetime.now().strftime("%d/%m/%Y:%H:%M:%S"))} '\
@@ -77,23 +80,18 @@ class MensajeServicer(protocol_pb2_grpc.MensajeServicer):
         mensaje = Mensaje(identificador, idTema, idUsuarioEmisor, contenido)
         if idTema == 1:
             with tema1_lock:
-                Tema1.switch_lock()
                 Tema1.push_mensaje(mensaje)
-                Tema1.switch_lock()
         elif idTema == 2:
             with tema2_lock:
-                Tema2.switch_lock()
                 Tema2.push_mensaje(mensaje)
-                Tema2.switch_lock()
         elif idTema == 3:
             with tema3_lock:
-                Tema3.switch_lock()
                 Tema3.push_mensaje(mensaje)
-                Tema3.switch_lock()
         else:
             estado = 503
         cadena_log = f'{str(datetime.now().strftime("%d/%m/%Y:%H:%M:%S"))} '\
         f'[ENVIAR MENSAJE] '\
+        f'ID Mensaje: {identificador} '\
         f'ID Usuario: {idUsuarioEmisor} '\
         f'ID Tema: {idTema} '\
         f'Contenido: {contenido} '\
@@ -103,10 +101,41 @@ class MensajeServicer(protocol_pb2_grpc.MensajeServicer):
         hilo_archivo.join()
         response = protocol_pb2.MensajeResponse(identificador=identificador, idUsuarioEmisor=idUsuarioEmisor, estado=estado)
         return response
+    
+    def escuchar(self, request, context):
+        idUsuario = request.idUsuario
+        estado = 200
+        mensajes = []
+        mensajes_struct = []
+        with usuarios_lock:
+            ids_usuarios = [usuario.id for usuario in usuarios]
+            if idUsuario in ids_usuarios:
+                usuario = usuarios[ids_usuarios.index(idUsuario)]
+                mensajes = usuario.mensajes
+                if len(mensajes) > 0:
+                    setattr(usuario, 'mensajes', [])
+                    for mensaje in mensajes:
+                        cadena_log = f'{str(datetime.now().strftime("%d/%m/%Y:%H:%M:%S"))} '\
+                        f'[MENSAJE ENVIADO] '\
+                        f'ID Usuario receptor: {idUsuario} '\
+                        f'ID Mensaje: {mensaje.identificador} '
+                        hilo_archivo = threading.Thread(target=escribir_archivo, args=(cadena_log,))
+                        hilo_archivo.start()
+                        hilo_archivo.join()
+                        mensajes_struct = [protocol_pb2.MensajeStruct(
+                            identificador=mensaje.identificador,
+                            idTema=int(mensaje.id_tema),
+                            idUsuarioEmisor=mensaje.id_usuario_emisor,
+                            contenido=mensaje.contenido
+                        ) for mensaje in mensajes]
+                else:
+                    estado = 400 # No hay mensajes para el usuario.
+        response = protocol_pb2.EscuchaResponse(estado=estado, mensajes=mensajes_struct)
+        return response
 
 def serve():
     port = "50051"
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=20))
     protocol_pb2_grpc.add_MensajeServicer_to_server(MensajeServicer(), server)
     server.add_insecure_port("[::]:" + port)
     server.start()

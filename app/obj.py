@@ -1,36 +1,35 @@
 import threading
-import time
+from time import sleep
 class Usuario:
     def __init__(self, id, tipo, suscripciones):
         self.id = id
         self.tipo = tipo
         self.suscripciones = suscripciones
-    
+        self.mensajes = []
+        self.mensajes_lock = threading.Lock()
+
     def notificar(self, mensaje):
-        print(f"[USUARIO {self.id}] {mensaje.contenido} - tema {mensaje.id_tema}")
-        time.sleep(1)
-        """
-        Enviar un proto message al usuario,
-        tener una cola auxiliar en caso de que no responda.
-        """
+        with self.mensajes_lock:
+            self.mensajes.append(mensaje)
 
 class Tema:
     def __init__(self, id):
         self.id = id
         self.cola_mensajes = []
         self.suscriptores = []
-        self.cola_mensajes_lock = False # False = No bloqueado, True = Bloqueado.
+        self.cola_mensajes_lock = threading.Lock()
         self.notificar = threading.Thread(target=self.notificar_suscriptores)
         self.notificar.daemon = True # Para que se detenga cuando se cierre el programa.
         self.notificar.start()
         
     def push_mensaje(self, string):
-        if len(self.cola_mensajes) < 5:
-            self.cola_mensajes.append(string)
-            print(f"[TEMA {self.id}] El mensaje se agregó correctamente.")
-            return True
-        print(f"[TEMA {self.id}] No se pueden agregar más mensajes, la lista está llena.")
-        return False
+        with self.cola_mensajes_lock:
+            if len(self.cola_mensajes) < 5:
+                self.cola_mensajes.append(string)
+                print(f"[TEMA {self.id}] El mensaje se agregó correctamente.")
+                return True
+            print(f"[TEMA {self.id}] No se pueden agregar más mensajes, la lista está llena.")
+            return False
     
     def pop_mensaje(self):
         if len(self.cola_mensajes) > 0:
@@ -39,17 +38,13 @@ class Tema:
     
     def notificar_suscriptores(self):
         while True:
-            if not self.cola_mensajes_lock:
+            with self.cola_mensajes_lock:
                 if len(self.cola_mensajes) > 0:
                     mensaje = self.pop_mensaje()
                     for suscriptor in self.suscriptores:
                         if str(self.id) in suscriptor.suscripciones:
                             suscriptor.notificar(mensaje)
-            else:
-                time.sleep(1)
-    
-    def switch_lock(self):
-        self.cola_mensajes_lock = not self.cola_mensajes_lock
+            sleep(1)
 
 class Mensaje:
     def __init__(self, identificador, id_tema, id_usuario_emisor, contenido):
