@@ -1,3 +1,10 @@
+"""
+Conjunto de clases que representan los objetos del sistema.
+
+Author: Isaac Fabián Palma Medina y Karla Verónica Quiros Delgado
+Date: June 8, 2023
+"""
+
 import threading
 from time import sleep
 
@@ -20,7 +27,7 @@ class Tema:
         self.suscriptores = []
         self.cola_mensajes_lock = threading.Lock()
         self.notificar = threading.Thread(target=self.notificar_suscriptores)
-        self.notificar.daemon = True # Para que se detenga cuando se cierre el programa.
+        self.notificar.daemon = True
         self.notificar.start()
         
     def push_mensaje(self, string):
@@ -38,6 +45,8 @@ class Tema:
         return None
     
     def notificar_suscriptores(self):
+        """Notifica a los suscriptores de un tema cuando hay mensajes en la cola.
+        """
         while True:
             with self.cola_mensajes_lock:
                 if len(self.cola_mensajes) > 0:

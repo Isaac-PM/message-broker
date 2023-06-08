@@ -1,3 +1,10 @@
+"""
+Aplicación cliente para un servidor de mensajes gRPC.
+
+Author: Isaac Fabián Palma Medina y Karla Verónica Quiros Delgado
+Date: June 8, 2023
+"""
+
 import grpc
 import protocol_pb2
 import protocol_pb2_grpc
@@ -11,6 +18,7 @@ from time import sleep
 from concurrent import futures
 
 def sesion(_tipo, _idUsuario, _tipoUsuario, _suscripciones):
+    """Inicia o cierra una sesión de usuario."""
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = protocol_pb2_grpc.MensajeStub(channel)
         response = stub.sesion(protocol_pb2.SesionRequest(tipo =_tipo, idUsuario = _idUsuario, tipoUsuario = _tipoUsuario, suscripciones = _suscripciones))
@@ -18,6 +26,7 @@ def sesion(_tipo, _idUsuario, _tipoUsuario, _suscripciones):
 
 escucharMensajesFlag = True
 def escucharMensajes(_idUsuario):
+    """Escucha los mensajes de un usuario (únicamente para suscriptores)."""
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = protocol_pb2_grpc.MensajeStub(channel)
         response = stub.escuchar(protocol_pb2.EscuchaRequest(idUsuario = _idUsuario))
@@ -35,6 +44,7 @@ def limpiar_pantalla():
         os.system('clear')
 
 def enviarMensaje(_idUsuarioEmisor):
+    """Envía un mensaje a un tema (únicamente para productores)."""
     print(">>>>>>>>>> Enviar un mensaje <<<<<<<<<<")
     print("\tDigite el contenido del mensaje:")
     _contenido = input()
@@ -63,6 +73,7 @@ def enviarMensaje(_idUsuarioEmisor):
 
 
 def detener_mensajes(signum, frame):
+    """Detiene la escucha de mensajes."""
     res = input("Ctrl + C presionado. ¿Desea dejar de escuchar por mensajes y salir? s/n ")
     if res == 's':
         limpiar_pantalla()
@@ -83,7 +94,7 @@ def menu_cliente():
     tipoUsuario = int(tipoUsuario)
     suscripciones = ""
     if tipoUsuario == 2:
-        patron = r'^(1|2|3)(,\s(1|2|3))*$' # Pendiente procesar en el servidor.
+        patron = r'^(1|2|3)(,\s(1|2|3))*$'
         suscripciones = ""
         while not re.match(patron, suscripciones):
             print("\tDigite las suscripciones (números del 1 al 3, separados por comas y un espacio):")

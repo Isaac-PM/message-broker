@@ -1,3 +1,10 @@
+"""
+Servidor gRPC que sigue un patrón publicador/suscriptor.
+
+Author: Isaac Fabián Palma Medina y Karla Verónica Quiros Delgado
+Date: June 8, 2023
+"""
+
 import grpc
 import protocol_pb2
 import protocol_pb2_grpc
@@ -22,12 +29,25 @@ Tema3 = Tema(3)
 usuarios = []
 
 def escribir_archivo(data):
+    """Utiliza un lock para evitar que se escriba en un archivo de texto al mismo tiempo.
+
+    Args:
+        data (string): Cadena de texto a escribir en el archivo.
+    """
     with archivo_lock:
         with open("log.txt", "a") as archivo: 
             archivo.write(data + "\n")
 
 class MensajeServicer(protocol_pb2_grpc.MensajeServicer):
     def sesion(self, request, context):
+        """Inicia o cierra una sesión de usuario.
+
+        Args:
+            request (request): Es enviado por un cliente.
+
+        Returns:
+            SesionResponse: Es enviado al cliente, contiene si el inicio o cierre de sesión fue exitoso o no (estado).
+        """
         tipo = request.tipo
         idUsuario = request.idUsuario
         tipoUsuario = request.tipoUsuario
@@ -73,6 +93,14 @@ class MensajeServicer(protocol_pb2_grpc.MensajeServicer):
         return response 
     
     def enviarMensaje(self, request, context):
+        """Envía un mensaje a un tema.
+
+        Args:
+            request (MensajeRequest): Es enviado por un cliente (productor).
+
+        Returns:
+            MensajeResponse: Es enviado al cliente, contiene si el envío del mensaje fue exitoso o no (estado).
+        """
         identificador = request.identificador
         idTema = request.idTema
         idUsuarioEmisor = request.idUsuarioEmisor
@@ -81,15 +109,18 @@ class MensajeServicer(protocol_pb2_grpc.MensajeServicer):
         mensaje = Mensaje(identificador, idTema, idUsuarioEmisor, contenido)
         if idTema == 1:
             with tema1_lock:
-                Tema1.push_mensaje(mensaje)
+                ingresado = Tema1.push_mensaje(mensaje)
+                if not ingresado: estado = 503
         elif idTema == 2:
             with tema2_lock:
-                Tema2.push_mensaje(mensaje)
+                ingresado = Tema2.push_mensaje(mensaje)
+                if not ingresado: estado = 503
         elif idTema == 3:
             with tema3_lock:
-                Tema3.push_mensaje(mensaje)
+                ingresado = Tema3.push_mensaje(mensaje)
+                if not ingresado: estado = 503
         else:
-            estado = 503
+            estado = 400
         cadena_log = f'{str(datetime.now().strftime("%d/%m/%Y:%H:%M:%S"))} '\
         f'[ENVIAR MENSAJE] '\
         f'ID Mensaje: {identificador} '\
@@ -104,6 +135,14 @@ class MensajeServicer(protocol_pb2_grpc.MensajeServicer):
         return response
     
     def escuchar(self, request, context):
+        """Escucha por los mensajes de un tema, para un usuario en específico.
+
+        Args:
+            request (EscuchaRequest): Es enviado por el cliente (suscriptor).
+
+        Returns:
+            EscuchaResponse: Es enviado al cliente, contiene los mensajes que se enviaron al usuario, en todos los temas a los que está suscrito.
+        """
         idUsuario = request.idUsuario
         estado = 200
         mensajes = []
@@ -130,7 +169,7 @@ class MensajeServicer(protocol_pb2_grpc.MensajeServicer):
                             contenido=mensaje.contenido
                         ) for mensaje in mensajes]
                 else:
-                    estado = 400 # No hay mensajes para el usuario.
+                    estado = 400
         response = protocol_pb2.EscuchaResponse(estado=estado, mensajes=mensajes_struct)
         return response
 

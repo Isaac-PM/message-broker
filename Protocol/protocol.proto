@@ -1,5 +1,11 @@
-syntax = "proto3";
+/*
+Definición de las estructuras de los mensajes que se intercambian entre el servidor y los clientes.
 
+Author: Isaac Fabián Palma Medina y Karla Verónica Quiros Delgado
+Date: June 7, 2023
+*/
+
+syntax = "proto3";
 package protocol;
 
 service Mensaje {
@@ -8,29 +14,29 @@ service Mensaje {
     rpc escuchar (EscuchaRequest) returns (EscuchaResponse) {}
 }
 
-message SesionRequest { // Mensaje (anteriormente) tipo 1.
+message SesionRequest {
     int32 tipo = 1; // Tipo de mensaje 1 = Login, 2 = Logout.
     string idUsuario = 2; // ID del usuario que quiere iniciar sesión o cerrar sesión.
     int32 tipoUsuario = 3; // Tipo de usuario 1 = Productor, 2 = Suscriptor.
     string suscripciones = 4; // Lista de suscripciones del usuario, un productor no tiene suscripciones, separadas por coma.
 }
 
-message SesionResponse { // Mensaje (respuesta, anteriormente) tipo 1.
-    int32 estado = 1; // Estado de la sesión 200 = OK, 503 = Error (intente más tarde).
+message SesionResponse {
+    int32 estado = 1; // Estado de la sesión.
     // Añadir una descripción del error.
 }
 
-message MensajeRequest { // Mensaje (anteriormente) tipo 2.
-    string identificador = 1; // ID del mensaje = Hash + Epoch + ID del tema.
+message MensajeRequest {
+    string identificador = 1; // ID del mensaje.
     int32 idTema = 2; // ID del tema al que pertenece el mensaje 1, 2 ó 3.
     string idUsuarioEmisor = 3; // ID del usuario (productor) que envía el mensaje.
     string contenido = 4; // Contenido del mensaje.
 }
 
-message MensajeResponse { // Mensaje (anteriormente) tipo 3.
+message MensajeResponse {
     string identificador = 1; // ID del mensaje.
     string idUsuarioEmisor = 2; // ID del usuario que leyó ó recibió el mensaje (puede ser "Servidor").
-    int32 estado = 3; // Estado del mensaje 200 = OK, 503 = Error (intente más tarde).
+    int32 estado = 3; // Estado del mensaje.
 }
 
 message MensajeStruct {
@@ -45,6 +51,6 @@ message EscuchaRequest {
 }
 
 message EscuchaResponse {
-    int32 estado = 1; // Estado de la escucha 200 = OK, 400 = No hay mensajes.
+    int32 estado = 1; // Estado de la escucha.
     repeated MensajeStruct mensajes = 2; // Lista de mensajes.
 }
