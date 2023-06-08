@@ -3,8 +3,9 @@ import protocol_pb2
 import protocol_pb2_grpc
 import logging
 import re
-import hashlib
+import signal
 import time
+import hashlib
 import os
 from time import sleep
 from concurrent import futures
@@ -15,6 +16,7 @@ def sesion(_tipo, _idUsuario, _tipoUsuario, _suscripciones):
         response = stub.sesion(protocol_pb2.SesionRequest(tipo =_tipo, idUsuario = _idUsuario, tipoUsuario = _tipoUsuario, suscripciones = _suscripciones))
     return response.estado
 
+escucharMensajesFlag = True
 def escucharMensajes(_idUsuario):
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = protocol_pb2_grpc.MensajeStub(channel)
@@ -53,9 +55,20 @@ def enviarMensaje(_idUsuarioEmisor):
     if response.estado == 200:
         print(f"[{_idUsuarioEmisor} : {_identificador}] Tema: {_idTema}, Contenido: {_contenido}")
         print("Mensaje enviado con éxito, enter para continuar.")
+    elif response.estado == 503:
+        print("Error al enviar el mensaje, el tema está lleno, enter para continuar.")
     else:
         print("Error al enviar el mensaje, enter para continuar.")
     input()
+
+
+def detener_mensajes(signum, frame):
+    res = input("Ctrl + C presionado. ¿Desea dejar de escuchar por mensajes y salir? s/n")
+    if res == 's':
+        limpiar_pantalla()
+        print(">>>>>>>>>> Gracias por su suscripción, deseamos haya tenido una linda experiencia <<<<<<<<<<")
+        global escucharMensajesFlag
+        escucharMensajesFlag = False
 
 def menu_cliente():
     print(">>>>>>>>>> Cliente gRPC <<<<<<<<<<")
@@ -77,6 +90,7 @@ def menu_cliente():
             suscripciones = input()
     
     estado = sesion(1, idUsuario, tipoUsuario, suscripciones) # El tipo 1 indica que es una solicitud de inicio de sesión.
+
     if estado == 200:
         print("Sesión iniciada con éxito, enter para continuar.")
         input()
@@ -104,18 +118,21 @@ def menu_cliente():
             print(f"Escuchando mensajes en el (los) tema(s) {suscripciones}...")
             print("Presione Ctrl + C para cerrar sesión.")
             print()
-            while True:
+            signal.signal(signal.SIGINT, detener_mensajes)
+            while escucharMensajesFlag:
                 escucharMensajes(idUsuario)
                 sleep(2)
-    
+
         estado = sesion(2, idUsuario, tipoUsuario, suscripciones) # El tipo 2 indica que es una solicitud de cierre de sesión.
         if estado == 200: print("Sesión cerrada con éxito.")
         else: print("Error al cerrar sesión, se detuvo la aplicación.")
-        exit()
+        exit(0)
         
     elif estado == 409:
-        print("Se detectó un nombre de usuario duplicado, intente de nuevo.")
-        exit()
+        print("\nSe detectó un nombre de usuario duplicado, intente de nuevo, enter para continuar.")
+        input()
+        limpiar_pantalla()
+        menu_cliente()
 
 if __name__ == '__main__':
     logging.basicConfig()

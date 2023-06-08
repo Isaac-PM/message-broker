@@ -3,6 +3,7 @@ import protocol_pb2
 import protocol_pb2_grpc
 import logging
 import threading
+import signal
 from concurrent import futures
 from datetime import datetime
 from concurrent.futures import thread
@@ -140,6 +141,14 @@ def serve():
     server.add_insecure_port("[::]:" + port)
     server.start()
     print("Servidor iniciado en el puerto " + port)
+    print("Presione Ctrl + C para detener el servidor...")
+
+    def signal_handler(sig, frame):
+        print('Deteniendo servidor...')
+        server.stop(0)
+        exit(0)
+    
+    signal.signal(signal.SIGINT, signal_handler)
     server.wait_for_termination()
 
 if __name__ == '__main__':
