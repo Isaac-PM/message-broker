@@ -63,7 +63,7 @@ def enviarMensaje(_idUsuarioEmisor):
 
 
 def detener_mensajes(signum, frame):
-    res = input("Ctrl + C presionado. ¿Desea dejar de escuchar por mensajes y salir? s/n")
+    res = input("Ctrl + C presionado. ¿Desea dejar de escuchar por mensajes y salir? s/n ")
     if res == 's':
         limpiar_pantalla()
         print(">>>>>>>>>> Gracias por su suscripción, deseamos haya tenido una linda experiencia <<<<<<<<<<")
